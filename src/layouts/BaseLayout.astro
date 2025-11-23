@@ -1,0 +1,67 @@
+---
+import '../styles/global.css';
+import { logoText, navLinks, footerPrimaryText, footerSecondaryText } from '../constants/site';
+
+const { pageTitle, pageDescription } = Astro.props;
+
+const currentPath = Astro.url.pathname;
+
+function isActive(href: string): boolean {
+  if (href === '/') {
+    return currentPath === '/';
+  } else if (href === '/posts') {
+    return currentPath.startsWith('/posts');
+  } else if (href === '/about') {
+    return currentPath === '/about';
+  }
+  return false;
+}
+---
+
+<!doctype html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={pageDescription ?? ''} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle ?? ''}</title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <div class="app-shell__inner">
+        <!-- Header -->
+        <header class="site-header">
+          <a href="/" class="site-logo">
+            {logoText}
+          </a>
+          <nav>
+            {
+              navLinks.map(({ label, href }) => (
+                <a class={`site-nav__link ${isActive(href) ? 'active' : ''}`} href={href}>
+                  {label}
+                </a>
+              ))
+            }
+          </nav>
+        </header>
+        <!-- Main -->
+        <main>
+          <slot />
+        </main>
+        <!-- Footer -->
+        <footer class="site-footer">
+          <span class="site-footer__primary">{footerPrimaryText}</span>
+          {footerSecondaryText && <span class="site-footer__secondary">{footerSecondaryText}</span>}
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>

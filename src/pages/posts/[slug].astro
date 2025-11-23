@@ -1,0 +1,106 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { render } from 'astro:content';
+import { calculateReadingTime } from '../../utils/blog';
+
+type PostEntry = CollectionEntry<'blog'>;
+
+export const getStaticPaths = async () => {
+  const posts = await getCollection('blog');
+
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post }
+  }));
+};
+
+const { post } = Astro.props as { post: PostEntry };
+const pageTitle = `${post.data.title} • Himory Blog`;
+const { Content } = await render(post);
+
+// 计算阅读时间（使用原始 markdown 内容）
+const readingTime = calculateReadingTime(post.body);
+---
+
+<BaseLayout pageTitle={pageTitle} pageDescription={post.data.description}>
+  <article class="post">
+    <a class="post__back" href="/posts">← 返回列表</a>
+    <h1>{post.data.title}</h1>
+    <div class="post__meta">
+      <span
+        >{
+          post.data.pubDate.toLocaleDateString('zh-CN', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          })
+        }</span
+      >
+      <span>·</span>
+      <span>{readingTime}</span>
+    </div>
+    <div class="post__body">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .post {
+    padding: 60px 0 100px;
+    max-width: 760px;
+  }
+
+  .post__back {
+    color: var(--accent-bold);
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .post h1 {
+    margin: 0 0 12px;
+    font-size: clamp(2.2rem, 4vw, 3.4rem);
+  }
+
+  .post__meta {
+    color: var(--fg-muted);
+    display: flex;
+    gap: 8px;
+    margin-bottom: 36px;
+  }
+
+  .post__body :global(p) {
+    margin-bottom: 1.5em;
+    color: var(--fg-muted);
+  }
+
+  .post__body :global(h2),
+  .post__body :global(h3) {
+    margin-top: 2.2em;
+    margin-bottom: 0.8em;
+  }
+
+  .post__body :global(code) {
+    background: rgba(255, 255, 255, 0.06);
+    padding: 0.2em 0.45em;
+    border-radius: 6px;
+  }
+
+  .post__body :global(pre) {
+    padding: 18px;
+    border-radius: 18px;
+    background: rgba(0, 0, 0, 0.5);
+    overflow-x: auto;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .post__body :global(blockquote) {
+    margin: 1.8em 0;
+    border-left: 3px solid var(--accent-bold);
+    padding-left: 1.2em;
+    color: var(--fg);
+  }
+</style>

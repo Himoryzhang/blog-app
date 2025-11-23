@@ -1,0 +1,144 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard';
+import { siteTitle, titleSuffix } from '../../constants/site';
+
+const posts = await getCollection('blog');
+
+// 按日期排序（新到旧）
+const sortedPosts = posts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+// 按年、月分组
+type GroupedPosts = {
+  year: number;
+  month: number;
+  posts: typeof sortedPosts;
+};
+
+const groupedPosts: GroupedPosts[] = [];
+let currentYear = 0;
+let currentMonth = 0;
+let currentGroup: GroupedPosts | null = null;
+
+sortedPosts.forEach((post) => {
+  const year = post.data.pubDate.getFullYear();
+  const month = post.data.pubDate.getMonth() + 1; // getMonth() 返回 0-11
+
+  if (year !== currentYear || month !== currentMonth) {
+    // 创建新的分组
+    currentGroup = {
+      year,
+      month,
+      posts: []
+    };
+    groupedPosts.push(currentGroup);
+    currentYear = year;
+    currentMonth = month;
+  }
+
+  currentGroup!.posts.push(post);
+});
+
+const pageTitle = `文章列表${titleSuffix}`;
+---
+
+<BaseLayout pageTitle={pageTitle}>
+  <section class="posts-list">
+    <div class="posts-list__header">
+      <h1>所有文章</h1>
+    </div>
+
+    <div class="posts-list__content">
+      {
+        groupedPosts.map((group) => (
+          <div class="posts-group">
+            <h2 class="posts-group__title">
+              {group.year} 年 {group.month} 月
+            </h2>
+            <div class="posts-group__list">
+              {group.posts.map((post) => (
+                <PostCard
+                  href={`/posts/${post.slug}`}
+                  metaItems={[
+                    post.data.pubDate.toLocaleDateString('zh-CN', {
+                      month: 'short',
+                      day: 'numeric'
+                    })
+                  ]}
+                  title={post.data.title}
+                  description={post.data.description}
+                />
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .posts-list {
+    padding: 60px 0 100px;
+  }
+
+  .posts-list__header {
+    margin-bottom: 48px;
+  }
+
+  .posts-list__header h1 {
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .posts-list__content {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  .posts-group {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .posts-group__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--fg);
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .posts-group__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+  }
+
+  @media (max-width: 680px) {
+    .posts-list {
+      padding: 40px 0 60px;
+    }
+
+    .posts-list__header {
+      margin-bottom: 32px;
+    }
+
+    .posts-list__content {
+      gap: 36px;
+    }
+
+    .posts-group {
+      gap: 20px;
+    }
+
+    .posts-group__list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

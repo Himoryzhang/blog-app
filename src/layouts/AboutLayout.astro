@@ -1,0 +1,77 @@
+---
+import { titleSuffix } from '../constants/site';
+import BaseLayout from './BaseLayout.astro';
+
+const { title, description } = Astro.props.frontmatter;
+const pageTitle = `${title}${titleSuffix}`;
+---
+
+<BaseLayout pageTitle={pageTitle} pageDescription={description}>
+  <article class="about-page">
+    <slot />
+  </article>
+</BaseLayout>
+
+<style>
+  .about-page {
+    padding: 60px 0 100px;
+    max-width: 760px;
+  }
+
+  .about-page :global(h1) {
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    margin: 0 0 48px;
+    line-height: 1.2;
+  }
+
+  .about-page :global(h2) {
+    font-size: clamp(1.8rem, 3vw, 2.2rem);
+    margin: 48px 0 24px;
+    color: var(--accent);
+    padding: 32px;
+    border-radius: 24px;
+    border: 1px solid var(--border);
+    background: linear-gradient(140deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+  }
+
+  .about-page :global(h2:first-of-type) {
+    margin-top: 0;
+  }
+
+  .about-page :global(h3) {
+    font-size: clamp(1.3rem, 2.5vw, 1.6rem);
+    margin: 32px 0 16px;
+    color: var(--accent-bold);
+  }
+
+  .about-page :global(h3:first-of-type) {
+    margin-top: 0;
+  }
+
+  .about-page :global(p) {
+    color: var(--fg-muted);
+    line-height: 1.8;
+    margin: 0 0 16px;
+  }
+
+  .about-page :global(h2 ~ p) {
+    padding: 0 32px;
+  }
+
+  .about-page :global(h3 ~ p) {
+    padding: 0 32px;
+  }
+
+  @media (max-width: 680px) {
+    .about-page :global(h2),
+    .about-page :global(h2 ~ p),
+    .about-page :global(h3 ~ p) {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    .about-page :global(h2) {
+      padding: 24px;
+    }
+  }
+</style>
