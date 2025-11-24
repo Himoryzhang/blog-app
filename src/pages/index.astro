@@ -17,7 +17,6 @@ const sortedPosts = posts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDa
     </div>
   </section>
 
-  <!-- @todo:加个分类功能，按类型实现 -->
   <section id="latest" class="post-feed">
     <div class="section-heading">
       <div>
@@ -29,7 +28,7 @@ const sortedPosts = posts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDa
       {
         sortedPosts.map((post) => (
           <PostCard
-            href={`/posts/${post.slug}`}
+            href={`/posts/${post.id}`}
             metaItems={[
               post.data.pubDate.toLocaleDateString('zh-CN', {
                 month: 'short',

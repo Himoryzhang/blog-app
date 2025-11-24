@@ -6,10 +6,8 @@ import { siteTitle, titleSuffix } from '../../constants/site';
 
 const posts = await getCollection('blog');
 
-// 按日期排序（新到旧）
 const sortedPosts = posts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
-// 按年、月分组
 type GroupedPosts = {
   year: number;
   month: number;
@@ -23,10 +21,9 @@ let currentGroup: GroupedPosts | null = null;
 
 sortedPosts.forEach((post) => {
   const year = post.data.pubDate.getFullYear();
-  const month = post.data.pubDate.getMonth() + 1; // getMonth() 返回 0-11
+  const month = post.data.pubDate.getMonth() + 1;
 
   if (year !== currentYear || month !== currentMonth) {
-    // 创建新的分组
     currentGroup = {
       year,
       month,
@@ -59,7 +56,7 @@ const pageTitle = `文章列表${titleSuffix}`;
             <div class="posts-group__list">
               {group.posts.map((post) => (
                 <PostCard
-                  href={`/posts/${post.slug}`}
+                  href={`/posts/${post.id}`}
                   metaItems={[
                     post.data.pubDate.toLocaleDateString('zh-CN', {
                       month: 'short',

@@ -10,7 +10,7 @@ export const getStaticPaths = async () => {
   const posts = await getCollection('blog');
 
   return posts.map((post) => ({
-    params: { slug: post.slug },
+    params: { slug: post.id },
     props: { post }
   }));
 };
@@ -19,8 +19,7 @@ const { post } = Astro.props as { post: PostEntry };
 const pageTitle = `${post.data.title} • Himory Blog`;
 const { Content } = await render(post);
 
-// 计算阅读时间（使用原始 markdown 内容）
-const readingTime = calculateReadingTime(post.body);
+const readingTime = calculateReadingTime(post.body ?? '');
 ---
 
 <BaseLayout pageTitle={pageTitle} pageDescription={post.data.description}>

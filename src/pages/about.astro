@@ -1,0 +1,15 @@
+---
+import { getCollection, render } from 'astro:content';
+import AboutLayout from '../layouts/AboutLayout.astro';
+
+const aboutEntries = await getCollection('about');
+const aboutEntry = aboutEntries[0];
+
+const { Content } = await render(aboutEntry);
+
+const { title, description } = aboutEntry.data;
+---
+
+<AboutLayout frontmatter={{ title, description }}>
+  <Content />
+</AboutLayout>
