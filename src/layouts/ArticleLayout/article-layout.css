@@ -1,0 +1,33 @@
+.article-container {
+  position: relative;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+}
+
+.global-toc {
+  position: static;
+  z-index: 10;
+}
+
+@media (min-width: 1180px) {
+  .global-toc {
+    position: sticky;
+    margin-top: 60px;
+    top: 20px;
+    margin-left: 20px;
+    height: 50vh;
+  }
+}
+
+@media (max-width: 1180px) {
+  .article-container{
+    flex-direction: column;
+    .global-toc {
+      margin-top: 20px;
+      position: static;
+    }
+  }
+}

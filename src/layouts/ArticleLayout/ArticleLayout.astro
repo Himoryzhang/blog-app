@@ -1,0 +1,18 @@
+---
+import TableOfContents from '../../components/TableOfContents';
+import BaseLayout from '../BaseLayout.astro';
+
+import './article-layout.css';
+
+const { pageTitle, pageDescription } = Astro.props;
+---
+
+<BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
+  <!-- 目录 - 只在文章详情页显示 -->
+  <div class="article-container">
+    <aside class="global-toc">
+      <TableOfContents client:load />
+    </aside>
+    <slot />
+  </div>
+</BaseLayout>

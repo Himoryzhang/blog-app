@@ -1,0 +1,88 @@
+.table-of-contents {
+  padding: 20px;
+  background: var(--bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  width: 240px;
+  max-height: calc(100vh - 140px);
+  overflow-y: auto;
+}
+
+.table-of-contents__title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--fg);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.table-of-contents__container {
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.table-of-contents__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.table-of-contents__item {
+  margin-bottom: 8px;
+}
+
+.table-of-contents__item--level-2 {
+  padding-left: 0;
+}
+
+.table-of-contents__item--level-3 {
+  padding-left: 16px;
+}
+
+.table-of-contents__item--level-4 {
+  padding-left: 32px;
+}
+
+.table-of-contents__link {
+  display: block;
+  color: var(--fg-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  border-left: 2px solid transparent;
+}
+
+.table-of-contents__link:hover {
+  color: var(--fg);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.table-of-contents__item--active .table-of-contents__link {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: rgba(179, 255, 171, 0.08);
+  font-weight: 500;
+}
+
+/* 滚动条样式 */
+.table-of-contents::-webkit-scrollbar {
+  width: 6px;
+}
+
+.table-of-contents::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.table-of-contents::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.table-of-contents::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+

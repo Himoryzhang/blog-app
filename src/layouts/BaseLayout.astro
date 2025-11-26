@@ -12,7 +12,7 @@ function isActive(href: string): boolean {
   } else if (href === '/posts') {
     return currentPath.startsWith('/posts');
   } else if (href === '/about') {
-    return currentPath === '/about';
+    return currentPath.startsWith('/about');
   }
   return false;
 }
